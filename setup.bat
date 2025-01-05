@@ -55,9 +55,15 @@ echo Set oWS = WScript.CreateObject("WScript.Shell") > "%APPDATA%\Microsoft\Wind
 echo sPath = CreateObject("WScript.Shell").CurrentDirectory >> "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\todo.vbs"
 echo oWS.Run """%~dp0venv\Scripts\pythonw.exe"" ""%~dp0todo_app.py""", 0, False >> "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\todo.vbs"
 
+echo Создание файла запуска в текущей директории...
+echo Set oWS = WScript.CreateObject("WScript.Shell") > "start_todo.vbs"
+echo sPath = CreateObject("WScript.Shell").CurrentDirectory >> "start_todo.vbs"
+echo oWS.Run """%~dp0venv\Scripts\pythonw.exe"" ""%~dp0todo_app.py""", 0, False >> "start_todo.vbs"
+
 echo.
 echo Установка успешно завершена!
 echo Приложение будет запускаться при старте Windows.
+echo Для ручного запуска используйте start_todo.vbs
 echo.
 echo Для запуска прямо сейчас нажмите любую клавишу...
 pause
