@@ -76,19 +76,6 @@ class TestTodoApp(unittest.TestCase):
             # Проверяем, что текст задачи изменился
             self.assertEqual(self.app.tasks[0]["text"], "Новый текст")
 
-    def test_complete_task(self) -> None:
-        """Тест завершения задачи"""
-        # Добавляем тестовые задачи
-        self.app.tasks = [Task(text="Задача 1"), Task(text="Задача 2")]
-        self.app.selected_task = 0
-
-        # Завершаем первую задачу
-        self.app.complete_selected_task()
-
-        # Проверяем, что осталась только вторая задача
-        self.assertEqual(len(self.app.tasks), 1)
-        self.assertEqual(self.app.tasks[0]["text"], "Задача 2")
-
     def test_task_navigation(self) -> None:
         """Тест навигации по задачам"""
         # Добавляем тестовые задачи

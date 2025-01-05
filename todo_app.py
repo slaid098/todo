@@ -33,8 +33,8 @@ class TodoApp(ctk.CTk):
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
 
-        # Путь к файлу с задачами (изменено)
-        self.data_file = Path(__file__).parent / "todo_data.json"
+        # Путь к файлу с задачами
+        self.data_file = Path.home() / "todo_data.json"
 
         # Список задач
         self.tasks = self.load_tasks()
@@ -51,7 +51,6 @@ class TodoApp(ctk.CTk):
         # Привязка горячих клавиш
         self.bind("<Control-n>", lambda e: self.show_new_task_dialog())  # noqa: ARG005
         self.bind("<Control-N>", lambda e: self.show_new_task_dialog())  # noqa: ARG005
-        self.bind("<Control-space>", lambda e: self.complete_selected_task())  # noqa: ARG005
         self.bind("<Delete>", lambda e: self.delete_selected_task())  # noqa: ARG005
         self.bind("<Up>", lambda e: self.select_prev_task())  # noqa: ARG005
         self.bind("<Down>", lambda e: self.select_next_task())  # noqa: ARG005
@@ -70,12 +69,12 @@ class TodoApp(ctk.CTk):
 
         # Информация о горячих клавишах
         info_text = (
-            "Hot keys:\n"
-            "UP/DOWN - Navigation between tasks\n"
-            "Ctrl+N - New task\n"
-            "Delete - Delete task\n"
-            "Ctrl+Space - Mark as completed\n"
-            "Enter - Edit task"
+            "Горячие клавиши:\n"
+            "↑/↓ - Навигация по задачам\n"
+            "Ctrl+N - Новая задача\n"
+            "Delete - Удалить задачу\n"
+            "Enter - Редактировать задачу\n"
+            "Escape - Закрыть диалог"
         )
         info_label = ctk.CTkLabel(self, text=info_text, justify="left")
         info_label.pack(pady=10, padx=10)
@@ -106,8 +105,17 @@ class TodoApp(ctk.CTk):
             number_label = ctk.CTkLabel(task_frame, text=f"{i + 1}.", width=30)
             number_label.pack(side="left", padx=(5, 0))
 
-            label = ctk.CTkLabel(task_frame, text=task["text"])
-            label.pack(side="left", padx=5, fill="x", expand=True)
+            # Создаем фрейм для текста, чтобы он прижимался влево
+            text_frame = ctk.CTkFrame(task_frame, fg_color="transparent")
+            text_frame.pack(side="left", fill="x", expand=True, padx=5)
+
+            label = ctk.CTkLabel(
+                text_frame,
+                text=task["text"],
+                anchor="w",
+                justify="left",
+            )
+            label.pack(side="left", fill="x", expand=True)
 
             # Если это выбранная задача, выделяем её
             if i == self.selected_task:
@@ -177,24 +185,6 @@ class TodoApp(ctk.CTk):
                 self.selected_task = None
             else:
                 # Если удалили последнюю задачу, выбираем предыдущую
-                self.selected_task = min(
-                    self.selected_task,
-                    len(self.tasks) - 1,
-                )
-
-            self.refresh_tasks_ui()
-            self.focus_force()  # Возвращаем фокус на окно
-
-    def complete_selected_task(self) -> None:
-        if self.selected_task is not None:
-            self.tasks.pop(self.selected_task)
-            self.save_tasks()
-
-            # Обновляем выбранную задачу
-            if not self.tasks:
-                self.selected_task = None
-            else:
-                # Если завершили последнюю задачу, выбираем предыдущую
                 self.selected_task = min(
                     self.selected_task,
                     len(self.tasks) - 1,
