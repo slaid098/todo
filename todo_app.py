@@ -33,8 +33,8 @@ class TodoApp(ctk.CTk):
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
 
-        # Путь к файлу с задачами
-        self.data_file = Path.home() / "todo_data.json"
+        # Путь к файлу с задачами (изменено)
+        self.data_file = Path(__file__).parent / "todo_data.json"
 
         # Список задач
         self.tasks = self.load_tasks()
