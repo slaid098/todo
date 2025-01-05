@@ -15,9 +15,9 @@ class TestTodoApp(unittest.TestCase):
         self.gui_patch = patch('customtkinter.CTk.mainloop')
         self.gui_patch.start()
 
-        # Патчим путь к файлу в приложении
-        with patch('pathlib.Path.home') as mock_home:
-            mock_home.return_value = Path()
+        # Патчим путь к файлу в приложении (изменено)
+        with patch('pathlib.Path.__file__', create=True) as mock_file:
+            mock_file.parent = Path()
             self.app = TodoApp()
             self.app.data_file = self.test_file
 
